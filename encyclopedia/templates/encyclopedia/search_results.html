@@ -5,11 +5,13 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Search Results</h1>
+    <h1>Search Results for {{ search }}</h1>
 
     <ul>
-        {% for results in search_results %}   
-            <li><a href="/{{ results }}">{{ entry }}</a></li>
+        {% for entry in search_results %}   
+            <li><a href="/{{ entry }}">{{ entry }}</a></li>
+        {% empty %}
+            <p> No results found. </p>
         {% endfor %}
     </ul>
 

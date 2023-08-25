@@ -22,23 +22,21 @@ def entry_title(request, entry):
             'entry_content': content_entry
         })
     except FileNotFoundError:
-        return render(request, "encyclopedia/entry.html")
+        return render(request, "encyclopedia/entry_error.html")
     
 def search_entries(request):
-    entries = util.list_entires()
+    entries = util.list_entries()
     search = request.GET.get("q", "")
+    search = str(search)
     search_results = []
 
     for entry in entries:
         if entry.lower() == search.lower():
-            return render(request, "encyclopedia/entry.html")
+            return entry_title(request, entry)
         elif search.lower() in entry.lower():
             search_results.append(entry)
-        
-    if search_results: 
-        return render(request,"encyclopedia/search_results.html", {"entries": search_results})
-    else: 
-        return render(request, "encyclopedia/entry_error.html" )
 
+    return render(request,"encyclopedia/search_results.html", {"search_results": search_results, "search": search})
     
+
     
