@@ -3,6 +3,7 @@ from django import forms
 
 from . import util
 import markdown
+import random
 
 
 def index(request):
@@ -37,6 +38,10 @@ def search_entries(request):
             search_results.append(entry)
 
     return render(request,"encyclopedia/search_results.html", {"search_results": search_results, "search": search})
-    
+
+def random_entry(request):
+    entries = util.list_entries()
+    entry = random.choice(entries)
+    return entry_title(request, entry)
 
     

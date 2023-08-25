@@ -5,4 +5,5 @@ from . import views
 urlpatterns = [
     path("", views.index, name="index"),
     path("search", views.search_entries, name="search"),
+    path("random", views.random_entry, name="random"),
     path("<str:entry>", views.entry_title, name="entry_title")]
