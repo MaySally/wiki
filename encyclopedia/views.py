@@ -1,9 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django import forms
 
 from . import util
 import markdown
 import random
+import os
 
 
 def index(request):
@@ -33,7 +34,7 @@ def search_entries(request):
 
     for entry in entries:
         if entry.lower() == search.lower():
-            return entry_title(request, entry)
+            return redirect("entry_title", entry)
         elif search.lower() in entry.lower():
             search_results.append(entry)
 
@@ -42,6 +43,30 @@ def search_entries(request):
 def random_entry(request):
     entries = util.list_entries()
     entry = random.choice(entries)
-    return entry_title(request, entry)
+    return redirect("entry_title", entry)
+
+def new_page(request):
+    return render(request, "encyclopedia/new_entry.html")
+
+def create_new(request):
+    content = request.POST.get("entry_content", "")
+    title = request.POST.get("entry_title", "")
+    file_title = title.replace(" ", "")
+    file_path = (f"entries/{file_title}.md")
+ 
+    if os.path.isfile(file_path):
+        return render(request, "encyclopedia/create_entry_error.html")
+    
+    else:
+        file = open(file_path, 'w')
+        file.write(f"# {title}\n{content}")
+        return redirect("entry_title", file_title)
+    
 
     
+
+    
+
+
+
+   
