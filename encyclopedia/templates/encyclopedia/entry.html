@@ -2,6 +2,19 @@
 
 {% block body %}
  
-    {{ entry_content|safe }}
+{{ entry_title|safe }}    
+
+{{ entry_content|safe }}
+
+    <br>
+    <br>
+    <div>
+        <form action="{% url 'edit_page' %}" method="GET">
+            <input type="submit"  value="Edit">
+            <input type="hidden" name="{{ entry_title }}">
+        </form>
+    </div>
 
 {% endblock %}
+
+

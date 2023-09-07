@@ -7,12 +7,13 @@ import random
 import os
 
 
-def index(request):
+def index(request):   
     return render(request, "encyclopedia/index.html", {
         "entries": util.list_entries()
     })
 
 def entry_title(request, entry):
+    # this is how we create an entry page, the main page needs to include the submit button
     markdown_file_path = f"entries/{entry}.md"  # path to your Markdown files
     
     try:
@@ -21,7 +22,7 @@ def entry_title(request, entry):
             content_entry = markdown.markdown(markdown_content)
             
         return render(request, "encyclopedia/entry.html", {
-            'entry_content': content_entry
+            'entry_content': content_entry, 'entry_title': entry
         })
     except FileNotFoundError:
         return render(request, "encyclopedia/entry_error.html")
@@ -62,11 +63,15 @@ def create_new(request):
         file.write(f"# {title}\n{content}")
         return redirect("entry_title", file_title)
     
+def edit_page(request):
+    entry_title = request.POST.get("entry_title", "") 
+    entry_content = util.get_entry(entry_title)
+    return render(request, "encyclopedia/edit_entry.html", {"entry_content": entry_content, "entry_title": entry_title})
 
+def edit_entry(request):
+    title = request.POST.get("entry_title", "")
+    content = request.POST.get("entry_content", "")
     
+    util.save_entry(title, content)
+    return redirect("entry_title", title)
 
-    
-
-
-
-   
